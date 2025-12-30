@@ -2,20 +2,61 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Cargando...</title>
+  <title>Video Player</title>
   <style>
     body {
       margin: 0;
       background: black;
       overflow: hidden;
-      cursor: none;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
+
+    /* Pantalla de inicio falsa */
+    #start-screen {
+      text-align: center;
+      color: white;
+      cursor: pointer;
+    }
+
+    #play-button {
+      width: 80px;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 15px;
+      transition: transform 0.2s;
+    }
+
+    #play-button:hover {
+      transform: scale(1.1);
+    }
+
+    /* Triángulo de Play */
+    #play-icon {
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-left: 35px solid white;
+      margin-left: 10px;
+    }
+
+    /* Screamer oculto */
     #screamer {
       position: fixed;
       inset: 0;
       display: none;
       z-index: 9999;
+      background: black;
     }
+
     #screamer img {
       width: 100%;
       height: 100%;
@@ -25,24 +66,40 @@
 </head>
 <body>
 
+<div id="start-screen" onclick="iniciarBroma()">
+  <div id="play-button">
+    <div id="play-icon"></div>
+  </div>
+  <p>Haga clic para reproducir video</p>
+</div>
+
 <div id="screamer">
   <img src="https://i.imgur.com/JNOcDsA.jpg" alt="Screamer">
-  <audio id="audio">
+  <audio id="audio" loop>
     <source src="harold-screamer.mp3" type="audio/mpeg">
   </audio>
 </div>
 
 <script>
-  setTimeout(() => {
+  function iniciarBroma() {
+    // Ocultar el botón y mostrar el screamer
+    document.getElementById("start-screen").style.display = "none";
     const screamer = document.getElementById("screamer");
     const audio = document.getElementById("audio");
 
-    screamer.style.display = "block";
-    audio.volume = 1.0; // 100%
-    audio.play();
-
+    // Activar pantalla completa
     document.documentElement.requestFullscreen().catch(() => {});
-  }, 3000);
+
+    // Mostrar imagen y ejecutar sonido de inmediato
+    screamer.style.display = "block";
+    audio.volume = 1.0;
+    
+    // El .play() ahora sí funcionará porque viene de un clic (iniciarBroma)
+    audio.play().catch(e => console.log("Error al reproducir:", e));
+    
+    // Ocultar el cursor para que no lo vean
+    document.body.style.cursor = "none";
+  }
 </script>
 
 </body>
